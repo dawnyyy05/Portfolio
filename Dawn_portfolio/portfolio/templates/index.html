@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>pip freeze > requirements.txt
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ info.name }} - Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+    <div class="logo">{{ info.name|slice:":1" }}<span>{{ info.name|slice:"1:" }}</span></div>
+    <div class="nav-links">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Portfolio</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
+    </div>
+    <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+    <div class="hero-text">
+        <p class="hello">HELLO!</p>
+        <h1>I'm <span class="orange">{{ info.name }}</span></h1>
+        <h2 class="orange">{{ info.title }}</h2>
+        <p class="bio">{{ info.bio }}</p>
+        <div class="hero-buttons">
+            <a href="#contact" class="btn-orange">Let's talk</a>
+        </div>
+        <div class="social-icons">
+            {% if contact.facebook %}<a href="{{ contact.facebook }}" target="_blank"><i class="fab fa-facebook-f"></i></a>{% endif %}
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+    <div class="hero-image">
+        {% if info.profile_image %}
+        <div class="img-glow">
+            <img src="{{ info.profile_image.url }}" alt="{{ info.name }}">
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-section">
+    <h2 class="section-title">About <span class="orange">Me</span></h2>
+    <div class="about-inner">
+        <div class="about-img">
+            {% if info.profile_image %}
+            <div class="img-glow small">
+                <img src="{{ info.profile_image.url }}" alt="{{ info.name }}">
+            </div>
+            {% endif %}
+        </div>
+        <div class="about-text">
+            <h3>{{ info.title }}</h3>
+            <p> I am a 20-year-old Information Technology student at Negros Oriental State University (NORSU), Bayawan-Santa Catalina Campus. My academic journey began at Bayawan City East Central School and continued at Pagatban High School.
+                Although I took the General Academic Strand (GAS) in Senior High because ICT wasn't available, my passion for technology never faded. Currently I am a 3rd-year IT student. I started learning C++, Java, and PHP  for the past years and
+                now I am learning how to build real-world websites using Django and Python. My goal is to keep improving my coding skills one project at a time.</p>
+                {% if info.age %}<p><strong>Age:</strong> {{ info.age }}
+            </p>{% endif %}
+            <a href="#contact" class="btn-orange">Contact me</a>
+        </div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="skills-section">
+    <h2 class="section-title">My <span class="orange">Skills</span></h2>
+    <div class="skills-list">
+        {% for skill in skills %}
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-name">{{ skill.skill }}</span>
+                <span class="skill-pct">{{ skill.percentage }}%</span>
+            </div>
+            <div class="skill-track">
+                <div class="skill-fill" style="width: {{ skill.percentage }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="projects-section">
+    <h2 class="section-title">My <span class="orange">Portfolio</span></h2>
+    <div class="projects-grid">
+        {% for project in projects %}
+        <div class="project-card">
+            <div class="project-number">0{{ forloop.counter }}</div>
+            <h3>{{ project.title }}</h3>
+            <p>{{ project.description }}</p>
+            <div class="project-tools">
+                <i class="fas fa-tools"></i> {{ project.tools }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="education-section">
+    <h2 class="section-title">My <span class="orange">Education</span></h2>
+    <div class="education-list">
+        {% for edu in education %}
+        <div class="education-item">
+            <div class="edu-dot"></div>
+            <div class="edu-content">
+                <span class="edu-year">{{ edu.year }}</span>
+                <h3>{{ edu.degree }}</h3>
+                <p>{{ edu.school }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+    <h2 class="section-title">Contact <span class="orange">Me</span></h2>
+    <div class="contact-inner">
+        <div class="contact-info">
+            {% if contact.email %}
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>{{ contact.email }}</span>
+            </div>
+            {% endif %}
+            {% if contact.github %}
+            <div class="contact-item">
+                <i class="fab fa-github"></i>
+                <a href="{{ contact.github }}" target="_blank">GitHub</a>
+            </div>
+            {% endif %}
+            {% if contact.facebook %}
+            <div class="contact-item">
+                <i class="fab fa-facebook"></i>
+                <a href="{{ contact.facebook }}" target="_blank">Facebook</a>
+            </div>
+            {% endif %}
+        </div>
+        <form class="contact-form" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <textarea name="message" placeholder="Your Message..." required></textarea>
+            </div>
+            <button type="submit" class="btn-orange">Send Message</button>
+        </form>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>&copy; 2026 {{ info.name }}. All rights reserved.</p>
+</footer>
+<script src="{% static 'main.js' %}"></script>
+</body>
+</html>
